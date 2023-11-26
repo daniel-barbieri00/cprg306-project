@@ -1,113 +1,230 @@
-import Image from 'next/image'
+"use client";
 
-export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.js</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+import React, { useState } from 'react';
+
+const Calculator = () => {
+    const [character, setCharacter] = useState('Albedo'); // Set default value
+    const [characterLevel, setCharacterLevel] = useState('20');
+    const [normalAttackLevel, setNormalAttackLevel] = useState('1');
+    const [elementalSkillLevel, setElementalSkillLevel] = useState('1');
+    const [elementalBurstLevel, setElementalBurstLevel] = useState('1');
+    const [result, setResult] = useState('');
+    const [results, setResults] = useState({
+        EXP: '',
+        Mora: '',
+        TalentBooks: '',
+        LocalSpecialty: '',
+        Boss: '',
+        WeeklyBoss: '',
+        MobDrops: '',
+        ElementalCrystals: '',
+    });
+
+    const containerStyle = {
+        width: '80%', // Adjust the width as needed
+        margin: '20px auto',
+        padding: '20px',
+        border: '2px solid #ccc', // Increase the border size
+        borderRadius: '10px',
+        textAlign: 'center', // Center the content
+    };
+
+    const formStyle = {
+        display: 'flex',
+        flexDirection: 'column',
+    };
+
+    const labelStyle = {
+        marginBottom: '5px',
+    };
+
+    const inputStyle = {
+        marginBottom: '10px',
+        padding: '5px',
+        color: 'black',
+    };
+
+    const buttonStyle = {
+        padding: '8px',
+        backgroundColor: '#007bff',
+        color: '#fff',
+        border: 'none',
+        cursor: 'pointer',
+    };
+
+    const resultContainerStyle = {
+        marginTop: '20px',
+        padding: '10px',
+        backgroundColor: '#f8f9fa',
+        border: '1px solid #ccc',
+        borderRadius: '5px',
+    };
+
+    const resultsStyle = {
+        marginTop: '20px',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        gap: '10px',
+    };
+
+    const resultBoxStyle = {
+        padding: '10px',
+        border: '1px solid #ccc',
+        borderRadius: '5px',
+        backgroundColor: '#f8f9fa',
+        color: "black",
+    };
+
+    const characterOptions = [
+        'Albedo', 'Alhaitham', 'Aloy', 'Amber', 'Anemo Traveler',
+        'Ayaka (Kamisato)', 'Ayato (Kamisato)',
+        'Baizhu', 'Barbara', 'Beidou', 'Bennett',
+        'Candace', 'Childe', 'Chongyun', 'Collei', 'Cyno',
+        'Dehya', 'Dendro Traveler', 'Diluc', 'Diona', 'Dori',
+        'Electro Traveler', 'Eula', 'Faruzan', 'Fischl', 'Freminet',
+        'Ganyu', 'Geo Traveler', 'Gorou', 'Heizou (Shikanoin)',
+        'Hu Tao', 'Hydro Traveler', 'Itto', 'Jean',
+        'Kaeya', 'Kaveh', 'Kazuha', 'Kirara', 'Klee',
+        'Kokomi', 'Kujou Sara', 'Kuki Shinobu', 'Layla', 'Lisa',
+        'Lynette', 'Lyney', 'Mika', 'Mona',
+        'Nahida', 'Neuvillette', 'Nilou', 'Ningguang', 'Noelle',
+        'Qiqi', 'Raiden Shogun', 'Razor', 'Rosaria',
+        'Sayu', 'Shenhe', 'Sucrose',
+        'Thoma', 'Tighnari', 'Venti', 'Wanderer', 'Wriosthesley',
+        'Xiangling', 'Xiao', 'Xingqiu', 'Xinyan',
+        'Yae Miko', 'Yanfei', 'Yaoyao', 'Yelan', 'Yoimiya', 'Yun jin',
+        'Zhongli',
+    ];
+
+    const characterLevelOptions = [
+        '20',
+        '20/40',
+        '40',
+        '40/50',
+        '50',
+        '50/60',
+        '60',
+        '60/70',
+        '70',
+        '70/80',
+        '80',
+        '80/90',
+        '90',
+    ];
+
+    const talentLevelOptions = Array.from({ length: 10 }, (_, index) => (index + 1).toString());
+
+    const calculateMaterials = () => {
+        // Perform your calculations here based on character, characterLevel, normalAttackLevel,
+        // elementalSkillLevel, and elementalBurstLevel
+        // For now, let's just display a sample result
+        const sampleResult = {
+            EXP: '5000',
+            Mora: '10000',
+            TalentBooks: '3x Teachings of Prosperity, 2x Guide to Resistance',
+            LocalSpecialty: '3x Qingxin',
+            Boss: "2x Stormterror's Claw, 1x Tail of Boreas",
+            WeeklyBoss: '1x Dream Solvent, 2x Spirit Locket of Boreas',
+            MobDrops: '5x Firm Arrowhead, 3x Slime Condensate',
+            ElementalCrystals: '2x Geo Crystal, 1x Anemo Crystal',
+        };
+        setResult(`Collect materials for talent levels: Normal/Charged/Plunge - ${normalAttackLevel}, Elemental Skill - ${elementalSkillLevel}, Elemental Burst - ${elementalBurstLevel}`);
+        setResults(sampleResult);
+    };
+
+    return (
+        <div style={containerStyle}>
+            <h2>Genshin Impact Calculator</h2>
+            <div style={formStyle}>
+                <label htmlFor="character" style={labelStyle}>
+                    Character:
+                </label>
+                <select
+                    id="character"
+                    value={character}
+                    onChange={(e) => setCharacter(e.target.value)}
+                    style={inputStyle}
+                >
+                    {characterOptions.map((option) => (
+                        <option key={option} value={option}>
+                            {option}
+                        </option>
+                    ))}
+                </select>
+
+                <label htmlFor="characterLevel" style={labelStyle}>
+                    Character Level:
+                </label>
+                <select
+                    id="characterLevel"
+                    value={characterLevel}
+                    onChange={(e) => setCharacterLevel(e.target.value)}
+                    style={inputStyle}
+                >
+                    {characterLevelOptions.map((option) => (
+                        <option key={option} value={option}>
+                            {option}
+                        </option>
+                    ))}
+                </select>
+
+                <label htmlFor="talentLevels" style={labelStyle}>
+                    Talent Levels:
+                </label>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <select
+                        id="normalAttackLevel"
+                        value={normalAttackLevel}
+                        onChange={(e) => setNormalAttackLevel(e.target.value)}
+                        style={{ ...inputStyle, flex: '1', marginRight: '5px' }}
+                    >
+                        {talentLevelOptions.map((option) => (
+                            <option key={option} value={option}>
+                                {option}
+                            </option>
+                        ))}
+                    </select>
+
+                    <select
+                        id="elementalSkillLevel"
+                        value={elementalSkillLevel}
+                        onChange={(e) => setElementalSkillLevel(e.target.value)}
+                        style={{ ...inputStyle, flex: '1', marginRight: '5px' }}
+                    >
+                        {talentLevelOptions.map((option) => (
+                            <option key={option} value={option}>
+                                {option}
+                            </option>
+                        ))}
+                    </select>
+
+                    <select
+                        id="elementalBurstLevel"
+                        value={elementalBurstLevel}
+                        onChange={(e) => setElementalBurstLevel(e.target.value)}
+                        style={{ ...inputStyle, flex: '1' }}
+                    >
+                        {talentLevelOptions.map((option) => (
+                            <option key={option} value={option}>
+                                {option}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                <button onClick={calculateMaterials} style={buttonStyle}>
+                    Calculate Materials
+                </button>
+                <div style={resultsStyle}>
+                    {Object.entries(results).map(([label, value]) => (
+                        <div key={label} style={resultBoxStyle}>
+                            <strong>{label}:</strong> {value}
+                        </div>
+                    ))}
+                </div>
+            </div>
         </div>
-      </div>
+            );
+};
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore the Next.js 13 playground.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
-}
+            export default Calculator;
