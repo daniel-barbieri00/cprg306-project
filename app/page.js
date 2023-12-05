@@ -1,9 +1,11 @@
 "use client";
 
 import React, { useState } from 'react';
+import { calculateCharLvlMats } from './calculations/charLvlCalcs';
+import { calculateTalentLvlMats } from './calculations/talentLvlCalcs';
 
 const Calculator = () => {
-    const [character, setCharacter] = useState('Albedo'); // Set default value
+    const [character, setCharacter] = useState('Albedo'); // or another default value
     const [characterLevel, setCharacterLevel] = useState('20');
     const [normalAttackLevel, setNormalAttackLevel] = useState('1');
     const [elementalSkillLevel, setElementalSkillLevel] = useState('1');
@@ -12,68 +14,15 @@ const Calculator = () => {
     const [results, setResults] = useState({
         EXP: '',
         Mora: '',
-        TalentBooks: '',
         LocalSpecialty: '',
         Boss: '',
         WeeklyBoss: '',
         MobDrops: '',
-        ElementalCrystals: '',
+        TinyElementalCrystals: '',
+        SmallElementalCrystals: '',
+        MediumElementalCrystals: '',
+        LargeElementalCrystals: '',
     });
-
-    const containerStyle = {
-        width: '80%', // Adjust the width as needed
-        margin: '20px auto',
-        padding: '20px',
-        border: '2px solid #ccc', // Increase the border size
-        borderRadius: '10px',
-        textAlign: 'center', // Center the content
-    };
-
-    const formStyle = {
-        display: 'flex',
-        flexDirection: 'column',
-    };
-
-    const labelStyle = {
-        marginBottom: '5px',
-    };
-
-    const inputStyle = {
-        marginBottom: '10px',
-        padding: '5px',
-        color: 'black',
-    };
-
-    const buttonStyle = {
-        padding: '8px',
-        backgroundColor: '#007bff',
-        color: '#fff',
-        border: 'none',
-        cursor: 'pointer',
-    };
-
-    const resultContainerStyle = {
-        marginTop: '20px',
-        padding: '10px',
-        backgroundColor: '#f8f9fa',
-        border: '1px solid #ccc',
-        borderRadius: '5px',
-    };
-
-    const resultsStyle = {
-        marginTop: '20px',
-        display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        gap: '10px',
-    };
-
-    const resultBoxStyle = {
-        padding: '10px',
-        border: '1px solid #ccc',
-        borderRadius: '5px',
-        backgroundColor: '#f8f9fa',
-        color: "black",
-    };
 
     const characterOptions = [
         'Albedo', 'Alhaitham', 'Aloy', 'Amber', 'Anemo Traveler',
@@ -115,21 +64,41 @@ const Calculator = () => {
     const talentLevelOptions = Array.from({ length: 10 }, (_, index) => (index + 1).toString());
 
     const calculateMaterials = () => {
-        // Perform your calculations here based on character, characterLevel, normalAttackLevel,
-        // elementalSkillLevel, and elementalBurstLevel
-        // For now, let's just display a sample result
-        const sampleResult = {
-            EXP: '5000',
-            Mora: '10000',
-            TalentBooks: '3x Teachings of Prosperity, 2x Guide to Resistance',
-            LocalSpecialty: '3x Qingxin',
-            Boss: "2x Stormterror's Claw, 1x Tail of Boreas",
-            WeeklyBoss: '1x Dream Solvent, 2x Spirit Locket of Boreas',
-            MobDrops: '5x Firm Arrowhead, 3x Slime Condensate',
-            ElementalCrystals: '2x Geo Crystal, 1x Anemo Crystal',
-        };
+        // Use the new calculation function for talent levels
+        const {
+            EXP,
+            LocalSpecialty,
+            TinyElementalCrystals,
+            SmallElementalCrystals,
+            MediumElementalCrystals,
+            LargeElementalCrystals,
+            Boss,
+        } = calculateCharLvlMats(characterLevel);
+
+        // Use the new calculation function for talent books
+        const {
+            WeeklyBoss,
+            SmallTalentBooks,
+            MediumTalentBooks,
+            LargeTalentBooks,
+        } = calculateTalentLvlMats(normalAttackLevel, elementalSkillLevel, elementalBurstLevel);
+
         setResult(`Collect materials for talent levels: Normal/Charged/Plunge - ${normalAttackLevel}, Elemental Skill - ${elementalSkillLevel}, Elemental Burst - ${elementalBurstLevel}`);
-        setResults(sampleResult);
+        setResults({
+            EXP,
+            Mora: '', // You can add Mora calculation logic here
+            LocalSpecialty,
+            Boss: Boss.toString(),
+            WeeklyBoss: WeeklyBoss.toString(),  // Include the Weekly Boss calculation
+            MobDrops: '', // You can add Mob Drops calculation logic here
+            TinyElementalCrystals: TinyElementalCrystals.toString(),
+            SmallElementalCrystals: SmallElementalCrystals.toString(),
+            MediumElementalCrystals: MediumElementalCrystals.toString(),
+            LargeElementalCrystals: LargeElementalCrystals.toString(),
+            SmallTalentBooks: SmallTalentBooks.toString(),  // Include the Small Talent Books calculation
+            MediumTalentBooks: MediumTalentBooks.toString(),  // Include the Medium Talent Books calculation
+            LargeTalentBooks: LargeTalentBooks.toString(),  // Include the Large Talent Books calculation
+        });
     };
 
     return (
@@ -227,4 +196,59 @@ const Calculator = () => {
             );
 };
 
-            export default Calculator;
+export default Calculator;
+
+const containerStyle = {
+    width: '80%', // Adjust the width as needed
+    margin: '20px auto',
+    padding: '20px',
+    border: '2px solid #ccc', // Increase the border size
+    borderRadius: '10px',
+    textAlign: 'center', // Center the content
+};
+
+const formStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+};
+
+const labelStyle = {
+    marginBottom: '5px',
+};
+
+const inputStyle = {
+    marginBottom: '10px',
+    padding: '5px',
+    color: 'black',
+};
+
+const buttonStyle = {
+    padding: '8px',
+    backgroundColor: '#007bff',
+    color: '#fff',
+    border: 'none',
+    cursor: 'pointer',
+};
+
+const resultContainerStyle = {
+    marginTop: '20px',
+    padding: '10px',
+    backgroundColor: '#f8f9fa',
+    border: '1px solid #ccc',
+    borderRadius: '5px',
+};
+
+const resultsStyle = {
+    marginTop: '20px',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(4, 1fr)',
+    gap: '10px',
+};
+
+const resultBoxStyle = {
+    padding: '10px',
+    border: '1px solid #ccc',
+    borderRadius: '5px',
+    backgroundColor: '#f8f9fa',
+    color: "black",
+};
