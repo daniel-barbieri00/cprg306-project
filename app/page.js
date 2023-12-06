@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { calculateCharLvlMats } from './calculations/charLvlCalcs';
 import { calculateTalentLvlMats } from './calculations/talentLvlCalcs';
+import { mobMoraValues, calculateTalentMoraMobDrops } from './calculations/mobMoraCalcs';
 
 const Calculator = () => {
     const [character, setCharacter] = useState('Albedo'); // or another default value
@@ -12,16 +13,7 @@ const Calculator = () => {
     const [elementalBurstLevel, setElementalBurstLevel] = useState('1');
     const [result, setResult] = useState('');
     const [results, setResults] = useState({
-        EXP: '',
-        Mora: '',
-        LocalSpecialty: '',
-        Boss: '',
-        WeeklyBoss: '',
-        MobDrops: '',
-        TinyElementalCrystals: '',
-        SmallElementalCrystals: '',
-        MediumElementalCrystals: '',
-        LargeElementalCrystals: '',
+
     });
 
     const characterOptions = [
@@ -83,21 +75,28 @@ const Calculator = () => {
             LargeTalentBooks,
         } = calculateTalentLvlMats(normalAttackLevel, elementalSkillLevel, elementalBurstLevel);
 
+        //calculate mora and mob drops
+        const talentLevels = [normalAttackLevel, elementalSkillLevel, elementalBurstLevel];
+        const { totalMora, totalSmallMobDrops, totalMediumMobDrops, totalLargeMobDrops } = calculateTalentMoraMobDrops(talentLevels);
+
+
         setResult(`Collect materials for talent levels: Normal/Charged/Plunge - ${normalAttackLevel}, Elemental Skill - ${elementalSkillLevel}, Elemental Burst - ${elementalBurstLevel}`);
         setResults({
             EXP,
-            Mora: '', // You can add Mora calculation logic here
+            Mora: totalMora.toString(),
             LocalSpecialty,
             Boss: Boss.toString(),
-            WeeklyBoss: WeeklyBoss.toString(),  // Include the Weekly Boss calculation
-            MobDrops: '', // You can add Mob Drops calculation logic here
+            WeeklyBoss: WeeklyBoss.toString(),
             TinyElementalCrystals: TinyElementalCrystals.toString(),
             SmallElementalCrystals: SmallElementalCrystals.toString(),
             MediumElementalCrystals: MediumElementalCrystals.toString(),
             LargeElementalCrystals: LargeElementalCrystals.toString(),
-            SmallTalentBooks: SmallTalentBooks.toString(),  // Include the Small Talent Books calculation
-            MediumTalentBooks: MediumTalentBooks.toString(),  // Include the Medium Talent Books calculation
-            LargeTalentBooks: LargeTalentBooks.toString(),  // Include the Large Talent Books calculation
+            SmallTalentBooks: SmallTalentBooks.toString(),
+            MediumTalentBooks: MediumTalentBooks.toString(),
+            LargeTalentBooks: LargeTalentBooks.toString(),
+            SmallMobDrops: totalSmallMobDrops.toString(),
+            MediumMobDrops: totalMediumMobDrops.toString(),
+            LargeMobDrops: totalLargeMobDrops.toString(),
         });
     };
 
@@ -205,6 +204,7 @@ const containerStyle = {
     border: '2px solid #ccc', // Increase the border size
     borderRadius: '10px',
     textAlign: 'center', // Center the content
+    backgroundColor: '#575757'
 };
 
 const formStyle = {
@@ -241,7 +241,7 @@ const resultContainerStyle = {
 const resultsStyle = {
     marginTop: '20px',
     display: 'grid',
-    gridTemplateColumns: 'repeat(4, 1fr)',
+    gridTemplateColumns: 'repeat(3, 1fr)',
     gap: '10px',
 };
 
@@ -251,4 +251,5 @@ const resultBoxStyle = {
     borderRadius: '5px',
     backgroundColor: '#f8f9fa',
     color: "black",
+    textAlign: 'center'
 };
