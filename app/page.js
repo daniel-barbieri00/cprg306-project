@@ -53,6 +53,12 @@ const Calculator = () => {
         '90',
     ];
 
+    const formatCategory = (category) => {
+        return category
+            .replace(/([a-z])([A-Z])/g, '$1 $2') // Add space between lowercase and uppercase letters
+            .replace(/([A-Z])([A-Z][a-z])/g, '$1 $2') // Add space between consecutive uppercase letters
+    };
+
     const talentLevelOptions = Array.from({ length: 10 }, (_, index) => (index + 1).toString());
 
     const calculateMaterials = () => {
@@ -186,11 +192,21 @@ const Calculator = () => {
                 <div style={resultsStyle}>
                     {Object.entries(results).map(([label, value]) => (
                         <div key={label} style={resultBoxStyle}>
-                            <strong>{label}:</strong> {value}
+                            <strong>{formatCategory(label)}:</strong> {value}
                         </div>
                     ))}
                 </div>
             </div>
+
+            <div style={instructionsContainerStyle}>
+                <h2>How to Use</h2>
+                <p>Assume starting character level is 1 with talent levels 1, 1, 1</p>
+                <p>1. Pick a Character you are Leveling</p>
+                <p>2. Choose the level you are going to level the character up to</p>
+                <p>3. Choose the level you are going to get each different talent too.</p>
+                <p>4. Press calculate, and results will display for how much of each material you need to collect</p>
+            </div>
+
         </div>
             );
 };
@@ -252,4 +268,15 @@ const resultBoxStyle = {
     backgroundColor: '#f8f9fa',
     color: "black",
     textAlign: 'center'
+};
+
+const instructionsContainerStyle = {
+    width: '80%',
+    margin: '20px auto',
+    padding: '20px',
+    border: '2px solid #ccc',
+    borderRadius: '10px',
+    textAlign: 'center',
+    backgroundColor: '#575757',
+    marginTop: '20px', // Adjust the margin as needed
 };

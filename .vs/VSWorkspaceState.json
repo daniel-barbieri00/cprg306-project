@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\app"
+    "\\app",
+    "\\app\\calculations"
   ],
-  "SelectedNode": "\\package.json",
+  "SelectedNode": "\\app\\calculations\\mobMoraCalcs.jsx",
   "PreviewInSolutionExplorer": false
 }
